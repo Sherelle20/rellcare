@@ -1,0 +1,73 @@
+{% extends 'rellcare/base.html' %}
+{% load static %}
+{% block title %} Rell'Care - Nous rejoindre
+{% endblock title %}
+{% block main %}
+<form id='register' method='post' action='{% url 'register' %} ' class="flex flex-col items-center max-w-xl px-4 mx-auto mt-4 lg:px-0 py-8" style='font-family: ProximaNova, "Helvetica Neue", Helvetica, Arial, sans-serif;'>
+            <p class="text-xl font-bold text-purple-500 uppercase">S'inscrire</p>
+            {% csrf_token %}
+            <div class="w-full p-8 mt-12 text-black bg-gray-800 rounded-lg">
+            <div class="flex flex-col">
+                    <label class='text-white' for="name">Nom</label>
+                    <input type="text" class="w-full p-2 mt-4" id="name" name="name" placeholder="Nom">
+                </div>
+               
+                <div class="flex flex-col mt-8">
+                    <label class='text-white' for="email">Email</label>
+                    <input type="email" class="w-full p-2 mt-4" id="email" name="email" placeholder="Email">
+                </div>
+                 <div class="flex flex-col mt-8">
+                    <label class='text-white' for="pays">Pays</label>
+                    <select required class="w-full p-2 mt-4" id="pays" name="pays" >
+                    <option v-for='(country, index) of countries' :value="country" :key='index'>${country} </option>
+                    </select>
+                </div>
+                <div class="flex flex-col mt-8">
+                    <label class='text-white' for="password">Mot de passe</label>
+                    <input type="password" class="w-full p-2 mt-4" id="password" name="password" placeholder="Mot de passe">
+                </div>
+                 <div class="flex flex-col mt-8">
+                    <label class='text-white' for="password_confirm">Confirmé le mot de passe</label>
+                    <input type="password" class="w-full p-2 mt-4" id="password_confirm" name="password_confirm" placeholder="Confirmez">
+                </div>
+                
+                <div class="flex flex-col mt-8">
+                    <button class="rell-button">S'inscrire</button>
+                </div>
+
+                <div class="flex justify-end mt-8 text-sm text-purple-500">
+                    <a href=" {% url 'login' %} ">Se connecter</a>
+                </div>
+            </div>
+       
+      </form>
+{% endblock %}
+
+{% block script %}
+
+<script src=" {% static 'js/axios.min.js' %} "></script>
+<script>
+    const register = new Vue({
+        delimiters: ["${", "}"],
+        el: "#register",
+        data: {
+
+            countries: [],
+        },
+        methods: {
+            async getCountries() {
+                try {
+                    const data = await axios.get('https://api.covid19api.com/countries')
+                    this.countries = data.data.map(e => e.Country).sort()
+                } catch (e) {
+                    console.log(e)
+                }
+            }
+        },
+        mounted() {
+            this.getCountries()
+        }
+    });
+</script>
+
+{% endblock %}

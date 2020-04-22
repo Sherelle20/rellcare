@@ -1,0 +1,257 @@
+{% extends "rellcare/base.html" %}
+      {% load static %}
+      {% load i18n %}
+
+   {% block title %}Rell'Care - Consultation {% endblock %}   
+   {% block main %}
+   <div id="questionaire"> 
+    <main class="max-w-5xl mx-auto my-4 border rounded-lg" v-if='!response'>
+        <div class="relative py-16 bg-gray-300">
+          <p
+            class="relative z-10 font-sans text-xl font-bold text-center md:text-3xl"
+          >
+            Rell'Care COVID-19 Screening
+          </p>
+
+          <img
+            src="{%static 'img/screening.png'%}"
+            class="absolute right-0 z-0"
+            style="margin-top: -3.9rem;"
+            alt=""
+          />
+        </div>
+        <div
+          
+          class="flex flex-col w-full p-4 font-sans font-bold text-white bg-gray-800 md:p-16"
+        >
+          <p class="text-sm text-gray-300" v-if="!answeredAll">
+            Question ${ questionIndex + 1 } sur ${ questions.length }
+          </p>
+
+          <p class="text-sm text-gray-300" v-if="answeredAll">
+            Parlez nous de vous!
+          </p>
+          <div
+            v-if="!answeredAll"
+            class="flex items-center justify-center h-32 mt-4 text-3xl text-center md:text-5xl"
+          >
+            ${ displayText || questions[questionIndex].question }
+          </div>
+          <div
+            v-if="!answeredAll"
+            :class="{'opacity-0 pointer-events-none':displayText}"
+            class="flex mt-8"
+          >
+            <button
+              class="flex-grow text-3xl rell-button"
+              @click="answer(true)"
+            >
+              Oui
+            </button>
+            <button
+              class="flex-grow ml-8 text-3xl rell-button"
+              @click="answer(false)"
+            >
+              Non
+            </button>
+          </div>
+
+          <div class="flex flex-col" v-if="!displayText && answeredAll">
+            <div class="flex flex-col py-4 md:items-end md:flex-row">
+              <span class="text-xl md:text-3xl">Votre Nom :</span>
+              <input
+                placeholder="(Optionelle)"
+                type="text"
+                class="flex-grow px-4 mt-2 text-3xl text-white bg-transparent border-b md:mt-0 md:ml-4"
+              />
+            </div>
+
+            <div class="relative flex flex-col py-4 md:items-end md:flex-row">
+              <span class="text-xl md:text-3xl">Votre Age :</span>
+              <input
+                type="number"
+                min="0"
+                class="flex-grow px-4 mt-2 text-3xl text-white bg-transparent border-b md:mt-0 md:ml-4"
+              />
+              <span class="absolute right-0 hidden mr-12 text-3xl md:block"
+                >ans</span
+              >
+            </div>
+
+            <div class="flex flex-col py-4 md:items-end md:flex-row">
+              <span class="text-xl md:text-3xl">Nationalité :</span>
+              <select
+                name="test"
+                id="text"
+                class="flex-grow px-4 mt-2 text-3xl text-white bg-transparent border-b md:mt-0 md:ml-4"
+              >
+                <option>Camerounais</option>
+                <option>Centrafricain</option>
+                <option>Congolais</option>
+                <option>Senegalais</option>
+                <option>Nigerian</option>
+                <option>Gabonais</option>
+              </select>
+            </div>
+            <button class="w-full mt-8 text-3xl rell-button">Résultat</button>
+          </div>
+        </div>
+      </main>
+      <main v-if='response'>
+        <div class="bg-gray-300">
+          <div class="relative h-48 max-w-5xl mx-auto">
+            <img
+              src="{%static 'img/results.png'%}"
+              alt=""
+              class="absolute bottom-0 ml-12 -mb-5"
+            />
+          </div>
+        </div>
+        <div class="max-w-4xl px-4 py-4 mx-auto md:px-0">
+          <div class="flex text-lg">
+            <button class="p-2 font-bold text-blue-600" @click='reset'>Back</button>
+            <button class="p-2 ml-auto font-bold text-blue-600" @click='printDoc'>
+              Imprimer
+            </button>
+            <a href={%url 'home'%} class="p-2 ml-8 font-bold text-blue-600">Terminé</a>
+          </div>
+          <div class="mt-8 md:flex">
+            <div class="md:w-1/2">
+              <p class="text-3xl font-black">
+                ${response.resume}
+              </p>
+              <p class="mt-4">
+                Basé sur vos reponse, ${response.appercue}
+              </p>
+
+              <p class="mt-16 text-2xl font-bold">Nous vous conseillons</p>
+
+              <div class="py-4 border-b" v-for="(conseil,index) of response.conseil" :key='index'>
+                <div class="flex text-xl font-bold">
+                  <span
+                    class="flex items-center justify-center w-8 h-8 text-white bg-purple-500 rounded-full"
+                    >${index+1}</span
+                  >
+                  <p class="ml-4">${conseil.titre}</p>
+                </div>
+
+                <div class="mt-2 ml-12">
+                  <p>
+                    ${conseil.description}
+                  </p>
+                  
+                </div>
+              </div>
+              
+            </div>
+            <div class="md:w-1/2 md:pl-24">
+              <div class="md:mt-56">
+                <p class="text-xl font-bold">Vos reponse</p>
+                <div class="mt-4">
+                  <div class="flex items-center mt-2" v-for='(answer, index) of config.data.answers' :key="answer.id">
+                    <span class="w-2 h-2 bg-black rounded"></span>
+                    <span class="ml-2 flex-grow">${questions.find(q=>q.id === answer.id).question} </span>
+                    <span class="text-red-700" v-if='answer.answer'>Oui</span>
+                    <span class="text-green-700 ml-2" v-else>Non</span>
+                  </div>
+                 
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="flex justify-center py-8 mt-16 text-lg font-bold text-purple-500"
+          >
+            <span class="px-4">Rell'Care Screening Tool</span>
+            <span class="px-4 border-l">
+              Legal
+            </span>
+          </div>
+        </div>
+      </main>
+      </div>
+   {% endblock %}
+   
+   {% block script %}
+  <script src="{%static '/js/axios.min.js' %}"></script>
+     <script>
+     
+      var questionaire = new Vue({
+        delimiters: ["${", "}"],
+        el: "#questionaire",
+        data: {
+          appreciation: [
+            "D'accord",
+            "Enrégistré",
+            "Bien reçu",
+            "Je vois!",
+            "Intéréssant",
+            "Continuez à répondre",
+          ],
+          displayText: "",
+          header : {'X-CSRFToken' : '{{csrf_token }}'},
+          config : {
+        method: 'post',
+        url: '{% url "consultation" %}',
+        headers: { 'X-CSRFToken' : '{{csrf_token }}' },
+        data: {
+          answers: []
+        }
+            },
+         
+          questions: {{ questions | safe }},
+          questionIndex: 0,
+          answers: [],
+          response: null,
+        },
+        methods: {
+          printDoc(){
+            print()
+          },
+          reset(){
+            this.questionIndex = 0
+            this.config.data.answers = []
+            this.appreciation = []
+            this.response = null 
+          },
+          async answer(response) {
+            this.config.data.answers.push({
+              id: this.questions[this.questionIndex].id,
+              answer: response,
+            });
+            if (this.questionIndex + 1 === this.questions.length) {
+              this.displayText =
+                "Félicitation vous avez terminer, Patientez vos résultat arrivent!";
+              try {
+                const data = await axios(this.config)
+                this.response = data.data
+                console.log(data)
+              } catch(e) {
+                console.log(e)
+              }
+            } else { 
+
+            //C EST FINI NORH OK DANS LE HOME.HTML IL Y'AS LES LIEN QUI NE FONCTIONNE PAS STP REPARE LES, OKK
+              this.displayText = this.appreciation[this.questionIndex % this.appreciation.length];
+            }
+            var self = this;
+            setTimeout(function () {
+              self.displayText = "";
+              self.questionIndex++;
+            }, 1000);
+          },
+        },
+        computed: {
+          answeredAll() {
+            return this.questionIndex + 1 > this.questions.length;
+          },
+        },
+        mounted() {
+          console.log()
+        }
+      });
+    </script>
+   {% endblock %}
+    
+  

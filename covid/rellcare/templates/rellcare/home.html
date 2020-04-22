@@ -1,0 +1,897 @@
+{% extends "rellcare/base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %} Rell'Care - Against COVID-19 {% endblock %}
+{% block main %}
+    <main class="max-w-6xl px-4 mx-auto xl:px-16">
+      <!-- FIRST SECTION-->
+      <div class="flex flex-wrap my-2 md:flex-no-wrap">
+        <div class="w-full" id="slide2">
+          <transition-group name="fade" tag="div" class="hero-slide">
+            <div v-for="i in [currentIndex]" :key="i" class="hero-slide">
+              <p
+                v-if="currentSlide.topRight"
+                class="relative right-0 z-20 self-start mr-4 text-2xl font-bold text-white lg:text-3xl"
+              >
+                ${ currentSlide.topRight }
+              </p>
+              <p
+                v-if="currentSlide.topLeft"
+                class="relative left-0 z-20 self-start ml-4 text-2xl font-bold text-white lg:text-3xl"
+              >
+                ${ currentSlide.topLeft }
+              </p>
+              <p
+                v-if="currentSlide.topMiddle"
+                class="relative z-20 self-start px-4 mx-auto text-2xl font-bold text-white lg:text-3xl"
+              >
+                ${ currentSlide.topMiddle }
+              </p>
+              <p
+                v-if="currentSlide.middle"
+                class="relative z-20 self-center px-4 mx-auto text-2xl font-bold text-white lg:text-3xl"
+              >
+                ${ currentSlide.middle }
+              </p>
+              <p
+                v-if="currentSlide.middleRight"
+                class="relative right-0 z-20 self-center mr-4 text-2xl font-bold text-white lg:text-3xl"
+              >
+                ${ currentSlide.middleRight }
+              </p>
+              <p
+                v-if="currentSlide.middleLeft"
+                class="relative left-0 z-20 self-center ml-4 text-2xl font-bold text-white lg:text-3xl"
+              >
+                ${ currentSlide.middleLeft }
+              </p>
+              <p
+                v-if="currentSlide.bottomRight"
+                class="relative right-0 z-20 self-end mr-4 text-2xl font-bold text-white lg:text-3xl"
+              >
+                ${ currentSlide.bottomRight }
+              </p>
+              <p
+                v-if="currentSlide.bottomLeft"
+                class="relative left-0 z-20 self-end ml-4 text-2xl font-bold text-white lg:text-3xl"
+              >
+                ${ currentSlide.bottomLeft }
+              </p>
+              <p
+                v-if="currentSlide.bottomMiddle"
+                class="relative z-20 self-end px-4 mx-auto text-2xl font-bold text-white lg:text-3xl"
+              >
+                ${ currentSlide.bottomMiddle }
+              </p>
+              <img class="absolute inset-0 z-10 w-full h-full" :src="currentSlide.image" alt="social_distancing" />
+            </div>
+          </transition-group>
+        </div>
+        <div class="mt-4 md:pl-4 md:mt-0 stat-side" id="stats">
+          <div class="overflow-hidden border border-gray-500 rounded-lg">
+            <p class="p-4 ">Aperçu des cas</p>
+            <div class="p-4 border-t border-b border-gray-500">
+              <div class="flex items-center text-sm">
+                <img src="https://www.countryflags.io/cm/flat/32.png" alt="Cameroon">
+                <p class="ml-2">Cameroun</p>
+              </div>
+              <div class="flex mt-2">
+                <div class="w-1/3">
+                  <p class="text-xs text-gray-600">Confirmés</p>
+                  <p class="mt-2">${ prettyNumber(data.cameroon.TotalConfirmed) }</p>
+                </div>
+                <div class="w-1/3 pl-2 border-l border-r border-gray-500">
+                  <p class="text-xs text-gray-600">Rétablis</p>
+                  <p class="mt-2">${ prettyNumber(data.cameroon.TotalRecovered) }</p>
+                </div>
+                <div class="w-1/3 pl-2">
+                  <p class="text-xs text-gray-600">Morts</p>
+                  <p class="mt-2">${ prettyNumber(data.cameroon.TotalDeaths) }</p>
+                </div>
+              </div>
+          
+            </div>
+          
+            <div class="p-4 border-b border-gray-500">
+              <div class="flex items-center text-sm">
+                <img
+                  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAAARVBMVEUAAABChfRChfRBhfRChfRBhPVAhvVBhfRChfRChPRBhfNChPRChfNChPRAh/dAhfRChfNBhPRBhPNBhPRBhPNAhfRBhPS7Bx6gAAAAF3RSTlMAYJ/P/09Q35DgwI/wcCAwgKCw0O9vv5uoiNwAAACdSURBVHgBndAFFsJAEATRhhQrcb//UXmDS/yvu+i40zmB5HzRN+d58E4fAsRImlpO9tmfFyWUloqc8NqHvFJNI7UUquC5W6SQOms6EqnAP+7DHyfT8KeR6aik+n5ksF0rEhmQDdR6FTA/MLNVN3/43HX/H9hJBfH1JX2l4vklDpweAv3w+kQIX9/uPWNqOUEfXOQhOn1zTQdd43TYFdiMB87SSSztAAAAAElFTkSuQmCC"
+                  alt="Cameroon">
+                <p class="ml-2">Global</p>
+              </div>
+              <div class="flex mt-2">
+                <div class="w-1/3">
+                  <p class="text-xs text-gray-600">Confirmés</p>
+                  <p class="mt-2">${ prettyNumber(data.Global.TotalConfirmed) }</p>
+                </div>
+                <div class="w-1/3 pl-2 border-l border-r border-gray-500">
+                  <p class="text-xs text-gray-600">Rétablis</p>
+                  <p class="mt-2">${ prettyNumber(data.Global.TotalRecovered) }</p>
+                </div>
+                <div class="w-1/3 pl-2">
+                  <p class="text-xs text-gray-600">Morts</p>
+                  <p class="mt-2">${ prettyNumber(data.Global.TotalDeaths) }</p>
+                </div>
+              </div>
+          
+            </div>
+          
+            <div class="flex flex-col p-4 border-gray-500">
+              <a href="{% url 'statistics' %}"
+                class="w-full text-sm font-normal text-center text-purple-500 bg-transparent border border-gray-500 rell-button">plus de statistiques</a>
+              <p class="mt-4 text-xs text-gray-500">Derniere mis a jour ${ data.Date }</p>
+          
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECOND SECTION -->
+      <div class="mt-4">
+        <h1 class="title">Maladie à coronavirus (COVID-19)</h1>
+
+        <!-- LES SYMTOMES -->
+        <div class="my-4">
+          <h2 class="text-gray-700 subtitle">Les Symptomes</h2>
+          <p class="mt-2 text-gray-700 paragraph">
+            <!--SHERELLE ON A BESION DE TEXTES-->
+          </p>
+          <div class="flex flex-wrap">
+            <!-- Symptome 1-->
+            <div class="px-4 md:w-1/3 lg:w-1/4">
+              <div class="w-full mt-4 bg-white shadow-xl">
+                <img
+                  src="{% static 'img/fever.png' %}"
+                  class="w-full"
+                  alt="corona_symptomes"
+                />
+                <div class="p-4">
+                  <p class="font-bold">Fièvre</p>
+                  <p class="text-sm text-gray-700">
+                   <!--SHERELLE ON A BESION DE TEXTES-->
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Symptome 2 -->
+            <div class="px-4 md:w-1/3 lg:w-1/4">
+              <div class="w-full mt-4 bg-white shadow-xl">
+                <img
+                  src="{% static 'img/cough.png' %}"
+                  class="w-full"
+                  alt="corona_symptomes"
+                />
+                <div class="p-4">
+                  <p class="font-bold">Toux sèche</p>
+                  <p class="text-sm text-gray-700">
+                    <!--SHERELLE ON A BESION DE TEXTES-->
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Symptome 3 -->
+            <div class="px-4 md:w-1/3 lg:w-1/4">
+              <div class="w-full mt-4 bg-white shadow-xl">
+                <img
+                  src="{% static 'img/breath.png' %}"
+                  class="w-full"
+                  alt="corona_symptomes"
+                />
+                <div class="p-4">
+                  <p class="font-bold">Difficulté respiratoire</p>
+                  <p class="text-sm text-gray-700">
+                    <!--SHERELLE ON A BESION DE TEXTES-->
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Symptome 3 -->
+            <div class="px-4 md:w-1/3 lg:w-1/4">
+              <div class="w-full mt-4 bg-white shadow-xl">
+                <img
+                  src="{% static 'img/nose.png' %}"
+                  class="w-full"
+                  alt="corona_symptomes"
+                />
+                <div class="p-4">
+                  <p class="font-bold">Écoulement nasale</p>
+                  <p class="text-sm text-gray-700">
+                    <!--SHERELLE ON A BESION DE TEXTES-->
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="relative flex py-4">
+            <img src="{% static 'img/screening.png' %}" class="relative z-10 w-64" alt="">
+            <div class="flex flex-col justify-between">
+          <p class="mt-2 text-gray-700 paragraph ">
+            
+            Vous avez un de ces syntomes?, Vous voulez savoir si vous êtes
+            malade ? Ne perdez plus une seconde et faites vous consultez sans
+            quitter chez vous! C'est gratuit, allez y essayez.
+          </p>
+          
+            </div>
+            <a href="{%url 'consultation'%}" class="absolute bottom-0 left-0 right-0 z-0 py-4 -mb-5 text-center rell-button">Je me consulte</a>
+
+         
+          </div>
+        </div>
+
+        <!-- INFO INTOX-->
+        <div class="my-16" id="slide">
+          <p class="text-gray-700 subtitle">QUESTION INFOS</p>
+          <div class="py-2 mt-4 bg-gray-800 md:px-16">
+            <div class="flex items-center justify-between">
+              <button
+                class="w-12 h-12 text-3xl font-black text-gray-600 rounded-full opacity-75 mdi mdi-chevron-left focus:outline-none hover:opacity-100"
+                @click="prev"
+                href="#"
+              ></button>
+              <transition-group
+                name="fade"
+                tag="div"
+                class="flex-grow"
+                style="height: 25rem;"
+              >
+                <div
+                  v-for="i in [currentIndex]"
+                  :key="i"
+                  class="flex flex-col justify-center w-full h-full text-center text-gray-200"
+                >
+                  <p class="title">
+                    ${ currentQuestion.question }
+                  </p>
+                  <p class="mt-8 text-purple-500 subtitle">
+                    ${ currentQuestion.answer }
+                  </p>
+                  <a class="mt-8 rell-button" :href='currentQuestion.link' v-if="currentQuestion.link">
+                    ${ currentQuestion.linkText }
+                  </a>
+                </div>
+              </transition-group>
+              <button
+                class="w-12 h-12 text-3xl font-black text-gray-600 rounded-full opacity-75 mdi mdi-chevron-right focus:outline-none hover:opacity-100"
+                @click="next"
+                href="#"
+              ></button>
+            </div>
+          </div>
+          
+          <div class="relative flex w-full mt-4">
+            <div class="flex flex-col flex-grow text-xl font-bold">
+              <p>Une question sur le COVID-19 ?</p>
+              <p class="mt-4 text-sm md:text-base">Nous repondons a toute et question et vous restez anonyme</p>
+              <p class="my-auto text-xl text-center text-blue-700 md:text-5xl"> J'APPELLE LE <BR> 1510</p>
+              <a href="{%url 'ask'%}" class="block mt-auto text-base text-center md:text-xl md:py-4 rell-button">Je pose ma question ici</a>
+            </div>
+            <img src="{% static 'img/question.png' %}" alt="Questino" class="relative right-0">
+
+          </div>
+        </div>
+      </div>
+
+      <!-- THIRD SECTION-->
+      <div class="w-full my-4 lg:flex">
+        <!-- TRANSMISSION-->
+
+        <div class="w-full">
+          <p class="text-gray-700 subtitle">TRANSMISSION</p>
+          <p class="mt-4 text-gray-700 paragraph">
+            People can catch COVID-19 from others who have the virus. The
+            disease can spread from person to person through small droplets from
+            the nose or mouth which are spread when a person with COVID-19
+            coughs or exhales. These droplets land on objects and surfaces
+            around the person. Other people then catch COVID-19 by touching
+            these objects or surfaces, then touching their eyes, nose or mouth.
+            People can also catch COVID-19 if they breathe in droplets from a
+            person with COVID-19 who coughs out or exhales droplets. This is why
+            it is important to stay more than 1 meter (3 feet) away from a
+            person who is sick. WHO is assessing ongoing research on the ways
+            COVID-19 is spread and will continue to share updated findings.
+          </p>
+          <!-- SHERELLE EN HAUT IL FAUT LE TEXTE POUR LES SYNTOME-->
+          <div class="mxd:flex">
+            <div class="mxd:w-1/2 mdx:pr-2">
+              <div class="px-4 py-2 mt-4 border border-purple-500 rounded-lg">
+                <p class="text-xl subtitle">Aerosol transmission</p>
+                <p class="mt-4 paragraph">
+                  In order for the virus to be spread without being coughed or
+                  sneezed in large drops of mucus, it has to somehow be able to
+                  suspend in the air for long enough to infect passersby. And
+                  that’s another complicating factor in figuring out
+                  transmission: People emit virus particles in a range of sizes,
+                  and some are small enough to be considered aerosols, or fine
+                  particles that can stay suspended in the air for hours and
+                  can...
+                </p>
+                <a href="#" class="inline-block mt-4 rell-button"
+                  >En savoir plus</a
+                >
+              </div>
+            </div>
+            <div class="mxd:w-1/2 mxd:pl-2">
+              <div class="px-4 py-2 mt-4 border border-purple-500 rounded-lg">
+                <p class="text-xl subtitle">Contact transmission</p>
+                <p class="mt-4 paragraph">
+                  There's one other route that's thought to play a role in the
+                  spread of COVID-19: contact transmission. In that situation,
+                  viral particles emitted from the respiratory tract of an
+                  infected individual land on a surface. Then, another person
+                  touches that object, then touches their nose, mouth or eyes.
+                  The virus then sneaks into the body via the mucous membranes,
+                  infecting the second person...
+                </p>
+                <a href="#" class="inline-block mt-4 rell-button"
+                  >En savoir plus</a
+                >
+              </div>
+            </div>
+
+            <div class="my-8">
+        <p class="text-gray-700 uppercase subtitle">Comment prevenir</p>
+
+        <div class="p-8 mt-4 font-bold text-gray-800 bg-gray-300">
+          <p>Hygiène des mains et respiratoire, bonnes pratiques en matière de sécurité sanitaire des aliments : l’Organisation mondiale de la santé (OMS) a rappelé plusieurs de ses recommandations standard à l’intention du grand public en vue de réduire l’exposition au nouveau coronavirus ainsi que sa transmission.</p>
+        </div>
+
+        <div class="w-full mt-8">
+          <p class="font-bold text-blue-700">Se laver les mains</p>
+          <p class="mt-2 text-sm text-gray-700 paragraph">
+            Comme pour toute autre épidémie ou maladie, il est important de se laver fréquemment les mains avec une solution hydroalcoolique ou à l’eau et au savon.
+          </p>
+        </div>
+
+        <div class="w-full mt-8">
+          <p class="font-bold text-blue-700">Hygiène de la bouche et du nez</p>
+          <p class="mt-2 text-sm text-gray-700 paragraph">
+            En cas de toux ou d’éternuement, veillez à vous couvrir la bouche et le nez avec le pli du coude ou avec un mouchoir. Ne laisser pas trainer votre mouchoir exposé aux autres. Jetez-le immédiatement dans une poubelle fermée après l’avoir utilisé et lavez-vous les mains. Evitez de crachez en public.
+          </p>
+        </div>
+
+        <div class="w-full mt-8">
+          <p class="font-bold text-blue-700">Contacts</p>
+          <p class="mt-2 text-sm text-gray-700 paragraph">
+            En cas de fièvre, de toux et de difficultés à respirer, consultez un médecin sans tarder. Indiquez-lui les voyages que vous avez effectués.
+          </p>
+        </div>
+        <div class="w-full mt-8">
+          <p class="font-bold text-blue-700">Consulter un médecin</p>
+          <p class="mt-2 text-sm text-gray-700 paragraph">
+            Évitez les contacts proches avec les personnes qui ont de la fièvre et qui toussent. Ne touchez pas leurs yeux, leurs nez et leurs bouches.
+          </p>
+        </div>
+        <div class="w-full mt-8">
+          <p class="font-bold text-blue-700">Vous faites vos courses sur un marché ?</p>
+          <p class="mt-2 text-sm text-gray-700 paragraph">
+            Sur les marchés situés dans les zones où il y actuellement des cas dus au nouveau coronavirus, évitez les contacts directs non protégés avec les animaux vivants (sauvages et de ferme) et avec les surfaces en contact avec les animaux. Lavez-vous bien les mains après avoir touché des animaux ou de la viande alimentaire. Evitez de vous toucher les yeux, le nez et la bouche lorsque vous vous rendez sur les marchés. Evitez de toucher les animaux malades ou errants, la viande avariée, les déchets et les fluides.
+          </p>
+        </div>
+        <div class="w-full mt-8">
+          <p class="font-bold text-blue-700">Vous travaillez sur un marché ?</p>
+          <p class="mt-2 text-sm text-gray-700 paragraph">
+            Si vous travaillez dans un marché de produits frais, veillez à bien désinfecter vos outils, équipements et espaces de travail au moins une fois par jour. Portez des gants, des blouses de travail et des masques pour recouvrir votre visage. Retirez vos vêtements de travail, lavez-les chaque jour et laissez-les sur votre lieu de travail. Evitez d’exposer les membres de votre famille avec vos vêtements et chaussures de travail non nettoyés.
+          </p>
+        </div>
+        <div class="w-full mt-8">
+          <p class="font-bold text-blue-700">Cuisine</p>
+          <p class="mt-2 text-sm text-gray-700 paragraph">
+            Evitez toute consommation de produits d’origine animale crus ou mal cuits. Cuisez bien et proprement vos viandes et vos œufs. Conformément aux bonnes pratiques relatives à la sécurité sanitaire des aliments, la viande, le lait ou les abats crus doivent être manipulés avec précaution afin d’éviter une contamination croisée avec les aliments crus. Utilisez différents couteaux et planches à découper lorsque vous manipulez de la viande crue et des aliments cuits. Lavez-vous les mains lorsque vous passez des aliments crus aux aliments cuits. Les animaux malades ou morts de maladie ne doivent pas être consommés.
+          </p>
+        </div>
+        <div class="w-full mt-8">
+          <p class="font-bold text-blue-700">Voyage</p>
+          <p class="mt-2 text-sm text-gray-700 paragraph">
+            Evitez de voyager si vous êtes malades ou avez de la fièvre ou de la toux. Si vous êtes malade ou avez des difficultés à respirer durant votre voyage, demandez rapidement une aide médicale et indiquez les voyages que vous avez effectués au personnel de santé. Evitez de vous toucher les yeux, le nez et la bouche. Si vous choisissez de porter un masque pour le visage, veillez à ce qu’il couvre votre bouche et votre nez. Evitez de toucher le masque une fois mis sur votre visage. Jetez le masque immédiatement après l’avoir utilisé et lavez-vous les mains.
+          </p>
+        </div>
+      </div>
+          </div>
+        </div>
+
+        <!--PUB 1-->
+        <div class="flex-grow mt-4 lg:pl-4 lg:mt-0 lg:flex lg:flex-col side ">
+          <div class="px-4 py-8 bg-purple-500">
+            <p class="font-bold text-white">
+              Avez vous besion d'assistance ?
+            </p>
+            <p class="mt-2 text-sm font-bold text-white">
+              Avez vous rencontrer un problem particulier ?
+            </p>
+          
+            <a href=' {% url 'us' %}#contact ' class='inline-block w-full mx-auto mt-4 text-2xl text-center bg-blue-500 rell-button'>Contactez
+              nous</a>
+          </div>
+          <div class="w-full mt-4 bg-gray-200 shadow-lg cameroun" id='alert'>
+            <img :src="data.urlToImage" class="object-cover w-full" alt="">
+            <div class="p-4 mt-4">
+              <p class="font-bold text-gray-700 text-purple-500 uppercase ">${  data.title  }</p>
+              <p class="mt-4 text-sm text-black">${  data.description  }</p>
+              <p class="mt-2 text-xs text-right text-gray-700">${  data.author  }</p>
+            </div>
+          </div>
+
+          <div id='feeds' class='flex-grow overflow-y-scroll'>
+            <div class="w-full mt-4 bg-gray-200 shadow-lg cameroun" v-for="(data, index) in feeds" :key='index'>
+          
+            <div class="p-4 mt-4" v>
+              <a :href="data.url" target='blank' class="font-bold text-gray-700 text-purple-500 uppercase ">${  data.title  }</a>
+              <p class="mt-2 text-xs font-bold text-gray-500 text-gray-700">${  data.publishAt  }</p>
+              <p class="mt-4 text-sm text-black">${  data.description  } </p>
+              <a :href="data.url" target='blank' class="block mt-2 rell-button">Lire plus</a>
+              
+            </div>
+          </div>
+          </div>
+          <!---<div class="flex-grow hidden mt-4">
+            <iframe
+              class="w-full h-64 lg:h-full"
+            src="https://www.youtube.com/embed/F5YVufqV8rs"
+              frameborder="0"
+              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+            ></iframe>
+          </div>-->
+        </div>
+      </div>
+
+      <!--FORTH SECTION-->
+      
+
+      <!--FIFTH SECTION-->
+     <div class="w-full my-4 cameroun" id='cameroun'>
+        <p class="text-gray-700 uppercase subtitle">SUIVEZ L'ACTUALITÉ</p>
+        
+        <div class="flex flex-col mt-8 shadow-xl md:flex-row md:shadow-none" v-for="(info, index) of data" :key='index'>
+          <a :href='info.url' class="self-stretch inline-block overflow-hidden border md:w-64" target="blank"><img :src="info.urlToImage" alt="" class="object-cover object-center w-full h-full"></a>
+          <div class="flex flex-col w-full px-2 py-2 md:px-8">
+            <a class="font-serif text-xl font-bold" target="blank" :href="info.url">
+             ${  info.title  }
+            </a>
+             <p class="mt-4 font-bold text-gray-600 paragraph">
+                ${  info.publishedAt  }
+              </p>
+              <p class="text-gray-600 paragraph">
+                ${  info.description  }
+              </p>
+          </div>
+
+         
+        </div>
+         <div class="mt-8">
+            <button class="block mx-auto rell-button" @click='fetch(true)'>Voir plus</button>
+          </div>
+      </div>
+
+      <!--SIXTH SECTION-->
+      <div class="w-full my-4" id='news'>
+        <p class="text-gray-700 uppercase subtitle">SUIVEZ L'ACTUALITÉ: MONDIAlE</p>
+        
+        <div class="flex flex-col mt-8 shadow-xl md:flex-row md:shadow-none" v-for="(info, index) of data" :key='info.source.id'>
+          <a :href='info.url' class="self-stretch inline-block overflow-hidden border md:w-64" target="blank"><img :src="info.urlToImage" alt="" class="object-cover object-center w-full h-full"></a>
+          <div class="flex flex-col w-full px-2 py-2 md:px-8">
+            <a class="font-serif text-xl font-bold" target="blank" :href="info.url">
+             ${  info.title  }
+            </a>
+             <p class="mt-4 font-bold text-gray-600 paragraph">
+                ${  info.publishedAt  }
+              </p>
+              <p class="text-gray-600 paragraph">
+                ${  info.description  }
+              </p>
+          </div>
+
+         
+        </div>
+        <span class="block mt-4 ml-auto text-xs">Powered by <a href="https://newsapi.org">News API</a> </span>
+         <div class="mt-8">
+            <button class="block mx-auto rell-button" @click='fetch(true)'>Voir plus</button>
+          </div>
+          
+      </div>
+    </main>
+
+    
+{% endblock %}
+
+{% block script %}
+<script src="{%static 'js/axios.min.js' %}"></script>
+  <script src="{% static 'js/sugar-custom.min.js' %}"></script>
+   <script>
+   
+
+    const slide = new Vue({
+      delimiters: ['${','}'],
+      el: "#slide",
+      data() {
+        return {
+          questions: [
+            {
+              question:
+                "Si je porte un masque, suis-je protéger contre le corona virus ?",
+              answer: "Le masque ne previent pas le coronavirus",
+              link: "",
+              linkText: "",
+            },
+            {
+              question:
+                "On dit que les antibiotique peuvent prevenir le coronavirus",
+              answer:
+                "Non, C'est Faux, Les antibiotique sont la pour traiter les bacterie qui sont deja présent et non pour prévenir",
+              link: "",
+              linkText: "",
+            },
+            {
+              question: "Le miel est t'il efficace contre cette maladie ?",
+              answer: "Non, Le miel ne soigne pas le corona virus",
+              link: "",
+              linkText: "",
+            },
+            {
+              question: "Comment faire pour poser ma question ?",
+              answer: "Facile, appuyer le button en dessous, et voila!",
+              link: "{% url 'ask' %}",
+              linkText: "Poser une question",
+            },
+            {
+              question: "Comment faire pour savoir si je suis malade",
+              answer:
+                "Faites consultez vos symtomes gratuitement ici! Allez y c'est gratuit ",
+              link: " {% url 'consultation' %} ",
+              linkText: "Se consulter",
+            },
+            {
+              question: "What is COVID-19 ?",
+              answer:
+                "COVID-19 is the infectious disease caused by the most recently discovered coronavirus. This new virus and disease were unknown before the outbreak began in Wuhan, China, in December 2019. ",
+            },
+            {
+              question: "How does it  ?",
+              answer:
+                "People can catch COVID-19 from others who have the virus. The disease can spread from person to person through small droplets from the nose or mouth which are spread when a person with COVID-19 coughs or exhales...",
+              link: "",
+              linkText: "Read more",
+            },
+            {
+              question: "Should I wear a mask to protest myself ?",
+              answer:
+                "Only wear a mask if you are ill with COVID-19 symptoms (especially coughing) or looking after someone who may have COVID-19. Disposable face mask can only be used once. If you are not ill or looking after someone who is ill then you are wasting a mask. There is a world-wide shortage of masks, so WHO urges people to use masks wisely...",
+              link: "",
+              linkText: "Read more",
+            },
+            {
+              question: "Can I catch COVID-19 from my pet ?",
+              answer:
+                "We are aware of instances of animals and pets of COVID-19 patients being infected with the disease;",
+              link: "",
+              linkText: "Learn more",
+            },
+
+            {
+              question: "Where can i learn more ?",
+              answer: "Click below to learn more about the new Coronavirus",
+              link: "{% url 'ask' %}",
+              linkText: "Learn more",
+            },
+          ],
+          timer: null,
+          currentIndex: 0,
+          tipIndex: 0,
+        };
+      },
+
+      mounted: function () {
+        this.startSlide();
+      },
+
+      methods: {
+        startSlide: function () {
+          clearInterval(this.timer);
+          this.timer = setInterval(this.next, 15000);
+        },
+
+        next: function () {
+          this.currentIndex += 1;
+
+          this.startSlide();
+        },
+        prev: function () {
+          this.currentIndex -= 1;
+
+          this.startSlide();
+        },
+      },
+
+      computed: {
+        currentQuestion: function () {
+          return this.questions[
+            Math.abs(this.currentIndex) % this.questions.length
+          ];
+        },
+      },
+    });
+    const slide2 = new Vue({
+      delimiters: ['${','}'],
+      el: "#slide2",
+      data() {
+        return {
+          slides: [
+            {
+              image: "{% static 'img/covid.png' %}",
+              topMiddle:
+                "Coronavirus est une réalité en Afrique et dans le monde entier",
+              bottomRight:
+                "Respectons les reglé pour avoir la vie saine et sauf",
+            },
+            {
+              image: "{% static 'img/social_distancing.svg' %}",
+              middleLeft: "Distance Social",
+              bottomRight:
+                "Ayez au moin 1,5m entre vous et votre interlocuteur",
+            },
+            {
+              image: "{% static 'img/home.svg' %}",
+              topRight: "Restez a la maison, restez eparnié",
+            },
+            {
+              image: "{% static 'img/houses.svg' %}",
+              bottomMiddle: "Limitez les deplacement, et les contact inutiles",
+            },
+            {
+              image: "{% static 'img/call.svg' %}",
+              topRight: "En cas de préoccupation, composez le numero vert",
+              middleRight: "1510",
+            },
+            {
+              image: "{% static 'img/wash_hands.svg' %}",
+              topRight: "Larvez vous les mains",
+              middleRight: "Utilisez de l'eau et du savon",
+              bottomRight: "ou un solution hydroalcolique",
+            },
+
+            {
+              image: "{% static 'img/face.svg' %}",
+              topRight: "Evitez de touchez votre face",
+              bottomLeft: "Surtout le Nez, Les yeux et la bouche",
+            },
+            {
+              image: "{% static 'img/phone_call.svg' %}",
+              bottomLeft:
+                "Si vous êtes malade, restez chez vous et appellez le 1510",
+            },
+          ],
+          timer: null,
+          currentIndex: 0,
+          tipIndex: 0,
+        };
+      },
+
+      mounted: function () {
+        this.startSlide();
+      },
+
+      methods: {
+        startSlide: function () {
+          clearInterval(this.timer);
+          this.timer = setInterval(this.next, 8000);
+        },
+
+        next: function () {
+          this.currentIndex += 1;
+
+          this.startSlide();
+        },
+        prev: function () {
+          this.currentIndex -= 1;
+
+          this.startSlide();
+        },
+      },
+
+      computed: {
+        currentSlide: function () {
+          return this.slides[Math.abs(this.currentIndex) % this.slides.length];
+        },
+      },
+    });
+    news = new Vue({
+      delimiters: ['${','}'],
+      el : '#news',
+      data : {
+        data: [],
+        today : new Date(new Date().setDate(new Date().getDate() -1)),
+        language: 'fr',
+        count: 10,
+        page:1
+      },
+
+      methods: {
+        async fetch(append=false) {
+          data = await axios.get(
+            `https://newsapi.org/v2/everything?from=${this.formatedDate}&q=+corona&apiKey=949756aa8e1b46429908122fcf0cedf8&pageSize=${this.count}&page=${this.page++}&language=${this.language}`
+          )
+          data = data.data.articles.filter(t => !!t.urlToImage)
+          if(append) {
+            this.data.push(...data)
+          }else {
+            this.data = data
+          }
+          this.data.map(d => d.publishedAt = Sugar.Date.format(new Date(d.publishedAt),'{d} {Month} {year}','fr'))
+          console.log(this.data)
+
+
+        }
+      },
+      mounted() {
+        this.fetch()
+      },
+      computed: {
+        formatedDate() {
+          today = this.today
+          return `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`
+        }
+      }
+    })
+     Alert = new Vue({
+       delimiters: ['${','}'],
+      el : '#alert',
+      data : {
+        data: 
+          {
+            urlToImage: 'https://www.minsante.cm/site/sites/default/files/styles/slider__af_/public/field/image/covid.jpg?itok=ZvkKcdZo',
+            title:'Covid-19. Port du masque obligatoire.',
+            description: 'Depuis le lundi 13 avril 2020, le port du masque est obligatoire au Cameroun. ',
+            url: 'https://www.minsante.cm/site/?q=fr/content/covid-19-port-du-masque-obligatoire',
+            author: 'MINSANTE'
+          } }
+     })
+    camerounNews = new Vue({
+      delimiters: ['${','}'],
+      el : '#cameroun',
+      data : {
+        data: [
+          {
+            urlToImage: 'https://www.minsante.cm/site/sites/default/files/styles/slider__af_/public/field/image/covid.jpg?itok=ZvkKcdZo',
+            title:'Covid-19. Port du masque obligatoire.',
+            description: 'Depuis le lundi 13 avril 2020, le port du masque est obligatoire au Cameroun. ',
+            url: 'https://www.minsante.cm/site/?q=fr/content/covid-19-port-du-masque-obligatoire',
+            author: 'MINSANTE'
+          },
+          {
+            urlToImage: 'https://www.minsante.cm/site/sites/default/files/styles/image_news__af_/public/field/image/Retouche%20de%20photos_HoJ4RJ_0.png' ,
+            title:'Covid-19 : ORCA offre 4000 sacs de riz au Minsanté.',
+            description: 'En présence du Ministre du Commerce, Monsieur Luc Magloire MBARGA ATANGANA, le Ministre de la Santé Publique, Dr MANAOUDA Malachie, a réceptionné ce... ',
+            url: 'https://www.minsante.cm/site/?q=fr/content/covid-19-orca-offre-4000-sacs-de-riz-au-minsant%C3%A9'
+          },
+          {
+            urlToImage: 'https://www.minsante.cm/site/sites/default/files/styles/image_news__af_/public/field/image/IMG_20200411_105914.jpg?itok=-sPXldy8',
+            title:'Covid-19 : Women In Global Health Cameroon au chevet du',
+            description: "Dans le cadre de la solidarité nationale en rapport avec le Covid-19 initiée par le Président de la République, Women In Global Health Cameroon,... ",
+            url: 'https://www.minsante.cm/site/?q=fr/content/covid-19-women-global-health-cameroon-au-chevet-du-centre-de-traitement-de-lh%C3%B4pital-jamot-de'
+          },
+          {
+            urlToImage: 'https://www.minsante.cm/site/sites/default/files/styles/image_news__af_/public/field/image/IMG-20200408-WA0077.jpg?itok=GuPsnTVt',
+            title:"OUEST CAMEROUN : LE COVID19 À L'ETROIT ",
+            description: "Nonobstant les 47 cas enregistrés dans la Région de l'Ouest, le dispositif mis en place par le Délégué Régional de la santé publique le Dr... ",
+            url: 'https://www.minsante.cm/site/?q=fr/content/ouest-cameroun-le-covid19-%C3%A0-letroit'
+          },
+          {
+            urlToImage: 'https://www.minsante.cm/site/?q=fr/content/covid-19-alliances-construction-cameroon-simplique-dans-la-riposte',
+            title:'Covid-19 : ALLIANCES Construction Cameroon ',
+            description: 'Dans le cadre de la solidarité nationale pour la riposte au Covid-19, le Ministre de la Santé Publique, Dr MANAOUDA Malachie a réceptionné ce jour,... ',
+            url: 'https://www.minsante.cm/site/sites/default/files/styles/image_news__af_/public/field/image/IMG-20200409-WA0087.jpg?itok=pXXTfCtq'
+          },
+        ],
+        today : new Date(new Date().setDate(new Date().getDate() -1)),
+        language: 'fr',
+        count: 10,
+        page:1,
+        country:'cm'
+      },
+
+      methods: {
+        async fetch(append=false) {
+          data = await axios.get(
+            `https://newsapi.org/v2/top-headlines?from=${this.formatedDate}&q=+corona&apiKey=949756aa8e1b46429908122fcf0cedf8&pageSize=${this.count}&page=${this.page++}&language=${this.language}`
+          )
+          data = data.data.articles.filter(t => !!t.urlToImage)
+          if(append) {
+            this.data.push(...data)
+          }else {
+            this.data = data
+          }
+          console.log(this.data)
+
+
+        }
+      },
+      mounted() {
+        //this.fetch()
+      },
+      computed: {
+        formatedDate() {
+          today = this.today
+          return `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`
+        }
+      }
+    })
+
+    const feed= new Vue({
+      delimiters: ['${','}'],
+      el:'#feeds',
+      data:{
+        feeds: []
+      },
+      methods: {
+        async fetch() {
+          let data = await axios.get('https://news.un.org/feed/subscribe/fr/news/region/africa/feed/rss.xml')
+          console.log(data)
+          data =  new window.DOMParser().parseFromString(data.data, "text/xml")
+          console.log(data)
+          const items = data.querySelectorAll("item");
+          console.log(items)
+          let count = 0
+          items.forEach(
+            el => {
+              if(count>=4){
+                return
+              }
+              console.log(el)
+              this.feeds.push({
+                
+                url: el.querySelector("link").innerHTML,
+                description:el.querySelector('description').textContent,
+                title:el.querySelector('title').innerHTML,
+                publishAt: Sugar.Date.format(new Date(el.querySelector('pubDate').textContent),'{d} {Month} {year}','fr')
+                
+              }
+              )
+              count++
+            }
+          )
+        }
+      },
+      mounted(){
+        this.fetch()
+      }
+    })
+
+    const stats = new Vue({
+      delimiters: ['${','}'],
+      el:"#stats",
+      data:{
+        data: {
+          cameroon:{},
+          Global:{}
+        }
+      },
+      methods: {
+        prettyNumber(num){
+          return num ? Sugar.Number.format(num): 0;
+        },
+
+        async fetch() {
+          let data = await axios.get('https://api.covid19api.com/summary')
+          data = data.data
+          console.log(data)
+          data.cameroon = data.Countries.find(x => x.CountryCode==='CM')
+          data.cameroon.Date = Sugar.Date(data.cameroon.Date).relative('fr')
+          data.Date = Sugar.Date(data.Date).relative('fr').raw
+          console.log(data)
+          this.data = data
+
+        }
+      },
+      mounted(){
+        this.fetch()
+      }
+    })
+  
+  </script>
+{% endblock  %}
+  

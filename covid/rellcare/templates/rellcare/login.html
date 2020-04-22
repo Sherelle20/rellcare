@@ -1,0 +1,28 @@
+{% extends 'rellcare/base.html' %}
+{% block title %} Rell'Care - Se Connecter
+{% endblock title %}
+{% block main %}
+<form method='post' action='{% url 'login' %} ' class="flex flex-col items-center max-w-xl px-4 mx-auto mt-4 lg:px-0 py-8" style='font-family: ProximaNova, "Helvetica Neue", Helvetica, Arial, sans-serif;'>
+            <p class="text-xl font-bold text-purple-500 uppercase">Se connecter</p>
+            <div class="w-full p-8 mt-12 text-black bg-gray-800 rounded-lg">
+            {% csrf_token %}
+                <div class="flex flex-col">
+                    <label class='text-white' for="email">Email</label>
+                    <input type="text" class="w-full p-2 mt-4" id="email" name="email" placeholder="Email">
+                </div>
+                <div class="flex flex-col mt-8">
+                    <label class='text-white' for="password">Mot de passe</label>
+                    <input type="password" class="w-full p-2 mt-4" id="password" name="password" placeholder="Mot de passe">
+                </div>
+
+                <div class="flex flex-col mt-8">
+                    <button class="rell-button">Se connecter</button>
+                </div>
+
+                <div class="flex justify-end mt-8 text-sm text-purple-500">
+                    <a href=" {% url 'register' %} ">S'inscrire gratuitement</a>
+                </div>
+            </div>
+       
+      </form>
+{% endblock %}

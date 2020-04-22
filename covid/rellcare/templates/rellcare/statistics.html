@@ -1,0 +1,422 @@
+{% extends "rellcare/base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %} Rell'Care - COVID WATCHER  {% endblock %}
+{% block main %}
+    <div id="stats" class="max-w-5xl px-4 mx-auto mt-4 lg:flex lg:px-0">
+        <div class="lg:w-8/12">
+            <p class="uppercase subtitle">Statistiques</p>
+            <div class="flex flex-col mt-4">
+                <label for="countries">Sélectionnez un pays </label>
+                <select name="countries" id="countries" class="py-4 mt-2 rounded-lg" v-model="selected">
+                    <option v-for="country in countries" :key="country.CountryCode" :value="country.CountryCode">
+                        ${country.Country}
+                    </option>
+                </select>
+                <button class="mt-2 rell-button" @click="selectCountry">
+                    Afficher
+                </button>
+            </div>
+            <div v-if="selectedCountry" class="w-full mt-4 overflow-hidden border border-gray-500 rounded-lg">
+                <p class="p-4">Aperçu des cas</p>
+                <div class="p-4 border-t border-b border-gray-500">
+                    <div class="flex items-center text-sm">
+                        <img :src="`https://www.countryflags.io/${selectedCountry.CountryCode}/flat/32.png`"
+                            :alt="selectedCountry.Country" />
+                        <p class="ml-2">${ selectedCountry.Country } Nouveaux</p>
+                    </div>
+                    <div class="flex mt-2">
+                        <div class="w-1/3">
+                            <p class="text-xs text-gray-600">Confirmés</p>
+                            <p class="mt-2">
+                                ${ prettyNumber(selectedCountry.NewConfirmed) }
+                            </p>
+                        </div>
+                        <div class="w-1/3 pl-2 border-l border-r border-gray-500">
+                            <p class="text-xs text-gray-600">Rétablis</p>
+                            <p class="mt-2">
+                                ${ prettyNumber(selectedCountry.NewRecovered) }
+                            </p>
+                        </div>
+                        <div class="w-1/3 pl-2">
+                            <p class="text-xs text-gray-600">Morts</p>
+                            <p class="mt-2">
+                                ${ prettyNumber(selectedCountry.NewDeaths) }
+                            </p>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="p-4 border-b border-gray-500" v-if="selectedCountry">
+                    <div class="flex items-center text-sm">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAAARVBMVEUAAABChfRChfRBhfRChfRBhPVAhvVBhfRChfRChPRBhfNChPRChfNChPRAh/dAhfRChfNBhPRBhPNBhPRBhPNAhfRBhPS7Bx6gAAAAF3RSTlMAYJ/P/09Q35DgwI/wcCAwgKCw0O9vv5uoiNwAAACdSURBVHgBndAFFsJAEATRhhQrcb//UXmDS/yvu+i40zmB5HzRN+d58E4fAsRImlpO9tmfFyWUloqc8NqHvFJNI7UUquC5W6SQOms6EqnAP+7DHyfT8KeR6aik+n5ksF0rEhmQDdR6FTA/MLNVN3/43HX/H9hJBfH1JX2l4vklDpweAv3w+kQIX9/uPWNqOUEfXOQhOn1zTQdd43TYFdiMB87SSSztAAAAAElFTkSuQmCC"
+                            alt="Total" />
+                        <p class="ml-2">Total</p>
+                    </div>
+                    <div class="flex mt-2">
+                        <div class="w-1/3">
+                            <p class="text-xs text-gray-600">Confirmés</p>
+                            <p class="mt-2">
+                                ${ prettyNumber(selectedCountry.TotalConfirmed) }
+                            </p>
+                        </div>
+                        <div class="w-1/3 pl-2 border-l border-r border-gray-500">
+                            <p class="text-xs text-gray-6Cameroon00">Rétablis</p>
+                            <p class="mt-2">
+                                ${ prettyNumber(selectedCountry.TotalRecovered) }
+                            </p>
+                        </div>
+                        <div class="w-1/3 pl-2">
+                            <p class="text-xs text-gray-600">Morts</p>
+                            <p class="mt-2">
+                                ${ prettyNumber(selectedCountry.TotalDeaths) }
+                            </p>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="flex flex-col p-4 border-gray-500">
+                    <p class="mt-4 text-xs text-gray-500">
+                        Derniere mis a jour ${ data.Date }
+                    </p>
+                </div>
+            </div>
+    
+            <div class="w-full mt-4 overflow-hidden border border-gray-500 rounded-lg">
+                <div class="flex items-center p-4">
+                    <img :src="`https://www.countryflags.io/${selectedCountry.CountryCode}/flat/32.png`"
+                        :alt="selectedCountry.Country" />
+                    <p class="ml-2">
+                        ${ selectedCountry ? selectedCountry.Country:'' } - Evolution de la pandémie
+                    </p>
+                </div>
+                <div class="p-4 border-t border-b border-gray-500" id="chart"></div>
+                <div class="flex flex-col p-4 border-gray-500">
+                    <p class="mt-4 text-xs text-gray-500">
+                        Derniere mis a jour ${ data.Date }
+                    </p>
+                </div>
+            </div>
+    
+            <div class="w-full mt-4 overflow-hidden border border-gray-500 rounded-lg">
+                <div class="flex items-center p-4">
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAAARVBMVEUAAABChfRChfRBhfRChfRBhPVAhvVBhfRChfRChPRBhfNChPRChfNChPRAh/dAhfRChfNBhPRBhPNBhPRBhPNAhfRBhPS7Bx6gAAAAF3RSTlMAYJ/P/09Q35DgwI/wcCAwgKCw0O9vv5uoiNwAAACdSURBVHgBndAFFsJAEATRhhQrcb//UXmDS/yvu+i40zmB5HzRN+d58E4fAsRImlpO9tmfFyWUloqc8NqHvFJNI7UUquC5W6SQOms6EqnAP+7DHyfT8KeR6aik+n5ksF0rEhmQDdR6FTA/MLNVN3/43HX/H9hJBfH1JX2l4vklDpweAv3w+kQIX9/uPWNqOUEfXOQhOn1zTQdd43TYFdiMB87SSSztAAAAAElFTkSuQmCC"
+                        alt="Total" />
+                    <p class="ml-2">Aperçu mondiale</p>
+                </div>
+                <div class="p-4 border-t border-b border-gray-500">
+                    <table class="w-full table-fixed">
+                        <thead class="py-2 font-light text-left border-b border-gray-500">
+                            <th @click='fsortBy("Country")' class="w-1/2 text-sm font-normal text-gray-500 cursor-pointer">
+                                Pays
+                            </th>
+                            <th @click='fsortBy("TotalConfirmed")'
+                                class="text-xs font-normal text-gray-500 cursor-pointer w-1/8">
+                                Confirmés
+                            </th>
+                            <th @click='fsortBy("TotalRecovered")'
+                                class="text-xs font-normal text-gray-500 cursor-pointer w-1/8">
+                                Rétablis
+                            </th>
+                            <th @click='fsortBy("TotalDeaths")'
+                                class="text-xs font-normal text-gray-500 cursor-pointer w-1/8">
+                                Morts
+                            </th>
+                        </thead>
+                        <tbody>
+                            <tr class="text-sm border-b border-gray-500" v-for="(country, index) of sortedCountry"
+                                :key="index">
+                                <td class="flex items-center py-2">
+                                    <img :src="`https://www.countryflags.io/${country.CountryCode}/flat/32.png`"
+                                        :alt="country.Country" />
+                                    <p class="ml-2">${ country.Country }</p>
+                                </td>
+                                <td class="py-2">
+                                    ${ prettyNumber(country.TotalConfirmed) }
+                                </td>
+                                <td class="py-2">
+                                    ${ prettyNumber(country.TotalRecovered) }
+                                </td>
+                                <td class="py-2">
+                                    ${ prettyNumber(country.TotalDeaths) }
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="flex flex-col p-4 border-gray-500">
+                    <p class="mt-4 text-xs text-gray-500">
+                        Derniere mis a jour ${ data.Date }
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="mt-8 lg:w-4/12 lg:pl-4 lg:mt-0">
+            <div class="overflow-hidden border border-gray-500 rounded-lg">
+                <p class="p-4">Aperçu des cas</p>
+                <div class="p-4 border-t border-b border-gray-500">
+                    <div class="flex items-center text-sm">
+                        <img src="https://www.countryflags.io/cm/flat/32.png" alt="Cameroon" />
+                        <p class="ml-2">Cameroun</p>
+                    </div>
+                    <div class="flex mt-2">
+                        <div class="w-1/3">
+                            <p class="text-xs text-gray-600">Confirmés</p>
+                            <p class="mt-2">
+                                ${ prettyNumber(data.cameroon.TotalConfirmed) }
+                            </p>
+                        </div>
+                        <div class="w-1/3 pl-2 border-l border-r border-gray-500">
+                            <p class="text-xs text-gray-600">Rétablis</p>
+                            <p class="mt-2">
+                                ${ prettyNumber(data.cameroon.TotalRecovered) }
+                            </p>
+                        </div>
+                        <div class="w-1/3 pl-2">
+                            <p class="text-xs text-gray-600">Morts</p>
+                            <p class="mt-2">
+                                ${ prettyNumber(data.cameroon.TotalDeaths) }
+                            </p>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="p-4 border-b border-gray-500">
+                    <div class="flex items-center text-sm">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAAARVBMVEUAAABChfRChfRBhfRChfRBhPVAhvVBhfRChfRChPRBhfNChPRChfNChPRAh/dAhfRChfNBhPRBhPNBhPRBhPNAhfRBhPS7Bx6gAAAAF3RSTlMAYJ/P/09Q35DgwI/wcCAwgKCw0O9vv5uoiNwAAACdSURBVHgBndAFFsJAEATRhhQrcb//UXmDS/yvu+i40zmB5HzRN+d58E4fAsRImlpO9tmfFyWUloqc8NqHvFJNI7UUquC5W6SQOms6EqnAP+7DHyfT8KeR6aik+n5ksF0rEhmQDdR6FTA/MLNVN3/43HX/H9hJBfH1JX2l4vklDpweAv3w+kQIX9/uPWNqOUEfXOQhOn1zTQdd43TYFdiMB87SSSztAAAAAElFTkSuQmCC"
+                            alt="Cameroon" />
+                        <p class="ml-2">Global</p>
+                    </div>
+                    <div class="flex mt-2">
+                        <div class="w-1/3">
+                            <p class="text-xs text-gray-600">Confirmés</p>
+                            <p class="mt-2">
+                                ${ prettyNumber(data.Global.TotalConfirmed) }
+                            </p>
+                        </div>
+                        <div class="w-1/3 pl-2 border-l border-r border-gray-500">
+                            <p class="text-xs text-gray-600">Rétanlis</p>
+                            <p class="mt-2">
+                                ${ prettyNumber(data.Global.TotalRecovered) }
+                            </p>
+                        </div>
+                        <div class="w-1/3 pl-2">
+                            <p class="text-xs text-gray-600">Morts</p>
+                            <p class="mt-2">${ prettyNumber(data.Global.TotalDeaths) }</p>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="flex flex-col p-4 border-gray-500">
+                    <a href="{% url 'statistics' %}"
+                        class="w-full text-sm font-normal text-center text-purple-500 bg-transparent border border-gray-500 rell-button">Plus de statistiques</a>
+                    <p class="mt-4 text-xs text-gray-500">
+                        Derniere mis a jour ${ data.Date }
+                    </p>
+                </div>
+            </div>
+            <div class="relative flex py-4 mt-4 bg-gray-800 rounded-lg">
+                <img src="{%static '/img/screening.png'%}" class="relative z-10 w-64" alt="">
+                <div class="flex flex-col justify-between">
+                    <p class="mt-2 text-gray-200 paragraph ">
+    
+                        Fait toi consulter, c'est gratuit
+                    </p>
+    
+                </div>
+                <a href=" {% url 'consultation' %} "
+                    class="absolute bottom-0 left-0 right-0 z-0 py-4 -mb-3 text-center lg:-mb-5 rell-button">Je me
+                    consulte</a>
+    
+    
+            </div>
+            <div class="px-4 py-8 mt-12 bg-purple-500 rounded-lg">
+                <p class="font-bold text-white">
+                    Avez vous besion d'assistance ?
+                </p>
+                <p class="mt-2 text-sm font-bold text-white">
+                    Avez vous rencontrer un problem particulier ?
+                </p>
+    
+                <a href=' {% url 'us' %}'
+                    class='inline-block w-full mx-auto mt-4 text-2xl text-center bg-blue-500 rell-button'>Contactez nous</a>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'js/axios.min.js' %} "></script>
+<script src=" {% static 'js/sugar-custom.min.js' %} "></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"
+    integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vr9giYI=" crossorigin="anonymous"></script>
+<script>
+  
+    const stats = new Vue({
+        delimiters: ["${", "}"],
+        el: "#stats",
+        data: {
+            data: {
+                cameroon: {},
+                Global: {},
+            },
+            countryData: null,
+            selectedCountry: null,
+            selected: "CM",
+            countries: [],
+            sortBy: "TotalConfirmed",
+            desc: true,
+        },
+        methods: {
+            prettyNumber(num) {
+                return num ? Sugar.Number.format(num) : 0;
+            },
+            createChart() {
+                const ctx = document.getElementById("chart");
+                ctx.innerHTML = "";
+                const canvas = document.createElement("canvas");
+                ctx.appendChild(canvas);
+                console.log(
+                    this.countryData.map((x) => ({
+                        x: new Date(x.Date),
+                        y: x.Confirmed,
+                    }))
+                );
+                const myChart = new Chart(canvas, {
+                    type: "line",
+
+                    data: {
+                        labels: [
+                            new Date(this.countryData[0].Date).toLocaleString(),
+                            new Date(
+                                this.countryData[this.countryData.length - 1].Date
+                            ).toLocaleString(),
+                        ],
+                        datasets: [
+                            {
+                                label: "Confirmés",
+                                data: this.countryData.map((a) => ({
+                                    x: new Date(a.Date),
+                                    y: a.Confirmed,
+                                })),
+
+                                borderWidth: 1,
+                                fill: false,
+                                borderColor: "#0080ff",
+                            },
+                            {
+                                label: "Rétablis",
+                                data: this.countryData.map((b) => ({
+                                    x: new Date(b.Date),
+                                    y: b.Recovered,
+                                })),
+
+                                borderWidth: 1,
+                                fill: false,
+                                borderColor: "#00ff7f",
+                            },
+
+                            {
+                                label: "Morts",
+                                data: this.countryData.map((c) => ({
+                                    x: new Date(c.Date),
+                                    y: c.Deaths,
+                                })),
+
+                                borderWidth: 1,
+                                fill: false,
+                                borderColor: "#ff0080",
+                            },
+                        ],
+                    },
+                    options: {
+                        title: {
+                            display: false,
+                            text: `Batches statistics`,
+                        },
+                        scales: {
+                            xAxes: [
+                                {
+                                    type: "time",
+                                    distribution: "linear",
+                                    time: {
+                                        unit: "day",
+                                        tooltipFormat: "MMM D YYYY",
+                                    },
+                                    bounds: "data",
+                                },
+                            ],
+                            yAxes: [
+                                {
+                                    ticks: {
+                                        beginAtZero: true,
+                                        precision: 0,
+                                        padding: 25,
+                                    },
+                                },
+                            ],
+                        },
+                    },
+                });
+            },
+            selectCountry() {
+                if (
+                    !this.selectedCountry ||
+                    (this.selectedCountry &&
+                        this.selectedCountry.CountryCode !== this.selected)
+                ) {
+                    this.selectedCountry = this.countries.find(
+                        (x) => x.CountryCode === this.selected
+                    );
+                    this.fetchFor(this.selectCountry.Slug);
+                }
+            },
+            fsortBy(value) {
+                if (value === this.sortBy) {
+                    this.desc = !this.desc;
+                } else {
+                    this.sortBy = value;
+                    this.desc = false;
+                }
+            },
+            async fetch() {
+                let data = await axios.get("https://api.covid19api.com/summary");
+                data = data.data;
+                console.log(data);
+                this.countries = data.Countries;
+                data.cameroon = data.Countries.find((x) => x.CountryCode === "CM");
+                this.selectedCountry = data.cameroon;
+                this.fetchFor("");
+                data.cameroon.Date = Sugar.Date(data.cameroon.Date).relative("fr");
+                data.Date = Sugar.Date(data.Date).relative("fr").raw;
+                console.log(data);
+                this.data = data;
+            },
+            async fetchFor(slug) {
+                let data = await axios.get(
+                    "https://api.covid19api.com/total/dayone/country/" +
+                    this.selectedCountry.Slug
+                );
+                data = data.data;
+                console.log(data);
+                this.countryData = data;
+                this.createChart();
+            },
+        },
+        mounted() {
+            this.fetch();
+        },
+        computed: {
+            sortedCountry() {
+                array = Sugar.Array(this.countries);
+                array.sortBy(this.sortBy, this.desc);
+                console.log(array);
+                return array.raw;
+            },
+        },
+    });
+</script>
+{% endblock  %}

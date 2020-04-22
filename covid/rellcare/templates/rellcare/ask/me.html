@@ -1,0 +1,143 @@
+{% extends 'rellcare/base.html' %}
+{% load static %}
+{% block title %} Ask'Rell - {{ user.name }}
+{% endblock title %}
+{% block main %}
+ <main class="max-w-4xl mx-auto mt-4" style="font-family: ProximaNova, "Helvetica Neue", Helvetica, Arial, sans-serif;">
+        <nav class="flex items-center">
+          <a href=" {% url 'ask' %} " class="text-2xl font-black text-purple-500">
+            <em class="text-4xl">a</em>sk'<e class="text-lg">Rell</e>
+          </a>
+         
+          <a href=" {% url 'question.unanswered' %} " class="ml-auto text-sm text-gray-800 hover:text-purple-500"
+            >Sans reponses</a
+          >
+        {% if user.is_authenticated %}
+        <a href=" {% url 'ask.me' %} " class="ml-4 text-sm text-gray-800 hover:text-purple-500"> {{ user.name }}  </a>
+        <form action=" {% url 'logout' %} " method="post">
+        <button  class="ml-4 text-sm text-gray-800 hover:text-purple-500"> Se déconnecter  </button>
+        {% csrf_token %}
+        </form>
+        
+        {% else %}
+        <a href=" {% url 'login' %} " class="ml-4 text-sm text-gray-800 hover:text-purple-500">Se connecter</a>
+        {% endif %}
+         
+        </nav>
+
+        <main class="p-4 lg:flex lg:px-0">
+          <div class="w-full">
+            <div class="p-4 text-white bg-gray-800 rounded-lg">
+                <p class="font-bold">{{ user.name }}</p>
+               
+               <p class="text-gray-200 mt-4">Pays: <span class="text-purple-500 font-bold"> {{ user.pays }} </span> </p>
+               <p class="text-gray-200 mt-4">Question: <span class="text-purple-500 font-bold"> {{ user.questions.count }} </span> </p>
+               <p class="text-gray-200 mt-4">Reponses: <span class="text-purple-500 font-bold"> {{ user.reponses.count }} </span> </p>
+               
+                
+                <div class="flex justify-end mt-4">
+                   
+                    <a href='{% url 'ask' %} ' class="rell-button"><em class="text-2xl">a</em>sk une question</a>
+                </div>
+            </div>
+
+
+            <div class="flex mt-8 overflow-hidden text-sm border border-gray-800 rounded-lg">
+                <a href=" {% url 'ask.me' %} " class="w-1/2 py-2 text-center text-white bg-gray-800">Mes Questions</a>
+                <a href=" {% url 'ask.me.reponses' %} " class="w-1/2 py-2 text-center text-gray-800 ">Mes Reponses</a>
+            </div>
+
+
+            <div class="mt-6">
+              {% for question in questions %}
+                  <div class="p-8 mt-2 text-white bg-gray-800 rounded-lg">
+                    <p class="text-lg font-bold"> {{ question.text }} 
+                    {% if question.anonyme %}
+                    <a href="#" class="text-xs font-light text-purple-500">Anonyme</a> 
+
+                    {% else %}
+                    <a href=" {% url 'ask.me' %} " class="text-xs font-light text-purple-500"> {{ question.user.name }} </a>
+                    {% endif %}
+                    </p>
+                    {% for reponse in question.reponses.all %}
+                    <div class="pb-4 mt-4 border-b-2">
+                 
+                        <a href="#" class="text-sm font-bold">{{ reponse.user.name | safe }} </a>
+                        <p class="mt-2">{{ reponse.reponses }} </p>
+                        <div class="flex justify-end mt-2">
+                            <button class="p-4 font-black text-purple-500 border border-purple-500 rounded-lg hover:bg-purple-500 hover:text-white">Vote <span class="text-white">{{ response.vote | safe }}</span></button>
+                        </div>
+                        
+                    </div>
+                    {% endfor %}
+                    
+                  
+                    <div class="mt-2 py-2 text-white bg-gray-800 hidden">
+                        
+                       {% if user.is_authenticated %}
+                        <form method='post' action=" {% url 'question' id=question.id %} ">
+                        <p class="font-bold">Je repond</p>
+                        {% csrf_token %}
+                        <textarea type="text" name="reponse" class="w-full p-2 mt-2 text-sm text-black rounded-lg" placeholder="Donne nous ta reponse" /></textarea>
+                        <div class="flex justify-between mt-4">
+                          <div class="flex items-center">
+                            
+                            <label for="anonymous" class="ml-2 text-xs text-gray-400"> Votre reponses sera publique</label>
+                          </div>
+                          <button class="rell-button"><em class="text-2xl">a</em>nswer</button>
+                        </div>
+                        </form>
+                      {% else %}
+                        <p class="text-center text-sm mt-2">
+                          <a href=" {% url 'login' %}" class='text-purple-500'> Connectez vous </a> pour repondre a cette questions
+                        
+                        </p>
+                      {% endif %}
+                   </div>
+                   
+                </div>
+                {% endfor %}
+                
+            </div>
+          </div>
+          <div class="mt-4 lg:pl-4 side lg:mt-0" >
+        <div class="relative flex py-4 bg-gray-800 rounded-lg">
+            <img src="{% static 'img/screening.png' %}" class="relative z-10 w-64" alt="">
+            <div class="flex flex-col justify-between">
+            <p class="mt-2 text-gray-200 paragraph ">
+                
+                Fait toi consulté, c'est gratuit
+            </p>
+          
+        </div>
+            <a href=" {% url 'consultation' %} " class="absolute bottom-0 left-0 right-0 z-0 py-4 -mb-3 text-center lg:-mb-5 rell-button">Je me consulte</a>
+
+         
+          </div>
+           <div class="px-4 py-8 mt-12 bg-purple-500 rounded-lg">
+            <p class="font-bold text-white">
+              Avez vous besion d'assistance ?
+            </p>
+            <p class="mt-2 text-sm font-bold text-white">
+              Avez vous rencontrer un problem particulier ?
+            </p>
+
+            <a href=' {% url 'us' %} ' class='inline-block w-full mx-auto mt-4 text-2xl text-center bg-blue-500 rell-button'>Contactez nous</a>          
+          </div>
+          <div class="mt-12 text-gray-800">
+              <p class="text-black border-b-2 border-gray-700">Leader board</p>
+              {% for user in users %}
+              <div class="flex items-center justify-between py-2">
+                  <span class="text-xs text-purple-800">{{ loop.index }} </span>
+                  <div class="flex flex-col flex-grow ml-4 text-sm">
+                      <a href="#">{{ user.name }}</a>
+                      <p class="mt-1 text-purple-800">{{ user.reponses.count }} reponses</p>
+                  </div>
+                  <span class="text-sm">{{ user.pays }}</span>
+
+              </div>
+              {% endfor %}
+          </div>
+        </main>
+      </main>
+      {% endblock %}

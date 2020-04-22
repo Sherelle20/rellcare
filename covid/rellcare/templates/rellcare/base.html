@@ -1,0 +1,140 @@
+{% load static %}
+{% load i18n %}
+
+<!DOCTYPE html>
+<html lang="fr">
+
+{% load static %}
+{% load i18n %}
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Consultation et statistique au Cameroun et dans le monde en temp réel">
+
+<!-- Google / Search Engine Tags -->
+<meta itemprop="name" content="Rell'Care - Tous contre le covid">
+<meta itemprop="description" content="Protection, Consultation et Statistique COVID-19 au Cameroun et dans le monde en temp réel">
+<meta itemprop="image" content="http://lh3.googleusercontent.com/proxy/PsCdLnuoyRmuSmKZ7yKiik6cOEAdj-NPYoOzDDsfICMKX_YOiyTO3x07Dol5ynCKjru1RTqvGXEzta0hd-xIqtskHR_I-0BZ0XGX192ZmA">
+
+<!-- Facebook Meta Tags -->
+<meta property="og:url" content="http://rellcare.pythonanywhere.com">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Rell'Care - Tous contre le covid">
+<meta property="og:description" content="Protection, Consultation et Statistique COVID-19 au Cameroun et dans le monde en temp réel">
+<meta property="og:image" content="http://lh3.googleusercontent.com/proxy/PsCdLnuoyRmuSmKZ7yKiik6cOEAdj-NPYoOzDDsfICMKX_YOiyTO3x07Dol5ynCKjru1RTqvGXEzta0hd-xIqtskHR_I-0BZ0XGX192ZmA">
+
+<!-- Twitter Meta Tags -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Rell'Care - Tous contre le covid">
+<meta name="twitter:description" content="Protection, Consultation et Statistique COVID-19 au Cameroun et dans le monde en temp réel">
+<meta name="twitter:image" content="http://lh3.googleusercontent.com/proxy/PsCdLnuoyRmuSmKZ7yKiik6cOEAdj-NPYoOzDDsfICMKX_YOiyTO3x07Dol5ynCKjru1RTqvGXEzta0hd-xIqtskHR_I-0BZ0XGX192ZmA">
+    <link rel="stylesheet" href="{% static '/css/tailwind.css'%}" />
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/5.0.45/css/materialdesignicons.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title> {% block title %}
+    {% endblock %} </title>
+</head>
+
+<body>
+    <header class="px-4 lg:px-16 nav" id="app">
+        <a href=' {% url 'home' %} ' class="font-sans text-2xl font-bold text-purple-500">Rell'Care</a>
+
+        <button class="text-2xl font-bold md:hidden" @click="showMenu = !showMenu">
+            Menu
+        </button>
+        <div class="menu" :class="{'h-0':!showMenu, 'h-auto':showMenu }">
+            <a href=" {% url 'home' %} " class="menu-link">Acceuil</a>
+            <a href=" {% url 'consultation' %} " class="menu-link">Consultation</a>
+            <a href=" {% url 'statistics' %} " class="menu-link">Statistiques</a>
+            <a href=" {% url 'ask.me' %} " class="menu-link">Suivie</a>
+
+            <a href="{% url 'ask' %}" class="menu-link md:ml-auto">En savoir plus sur la maladie</a>
+        </div>
+    </header>
+
+   {% block main %}
+   {% endblock %}
+
+<div class="px-8 bg-blue-800 lg:px-16">
+    <div class="flex flex-col text-xs text-white md:flex-row">
+        <!-- Footer about  -->
+        <div class="flex flex-col pr-12 md:w-2/5 lg:pr-24">
+            <p class="text-2xl font-bold text-purple-500">Rell'Care</p>
+            <p class="mt-4">
+               Rell'Care est un site internet dont l'objectif est de sensibiliser sur le nouveau coronavirus
+        , de présenter l'évolution de la pandémie au Cameroun et dans le monde. 
+        De permettre aux utilisateurs de faire une vérification de leurs symptômes depuis chez eux,
+        et de répondre à leurs différentes questione et doutes concernant la maladie.
+            </p>
+            <div class="flex my-4 text-2xl">
+                <span
+                    class="flex items-center justify-center w-8 h-8 text-blue-900 bg-white rounded-full mdi mdi-facebook"></span>
+                <span
+                    class="flex items-center justify-center w-8 h-8 ml-4 text-blue-900 bg-white rounded-full mdi mdi-twitter"></span>
+                <span
+                    class="flex items-center justify-center w-8 h-8 ml-4 text-blue-900 bg-white rounded-full mdi mdi-google"></span>
+                <span
+                    class="flex items-center justify-center w-8 h-8 ml-4 text-blue-900 bg-white rounded-full mdi mdi-instagram"></span>
+            </div>
+        </div>
+        <!-- Footer Parcourir  -->
+        <div class=" md:w-1/5">
+            <p class="text-xl font-bold text-purple-500">Parcourir</p>
+            <div class="flex flex-col mt-4">
+                <a href=" {% url 'statistics' %} ">Statistique ?</a>
+                    <a href="{% url 'ask' %}" class="mt-2">Ask'Rell</a>
+                        <a href="{% url 'consultation' %}" class="mt-2">Consultation</a>
+                            <a href="{% url 'us' %}" class="mt-2">L'équipe</a>
+                                <a href="https://www.who.int" target='blank' class="mt-2">L'OMS</a>
+                                    <a href="https://www.minsante.cm" target='blank' class="mt-2">MINSANTE</a>
+
+            </div>
+        </div>
+        <!-- Footer Recruteur  -->
+        <div class=" md:w-1/5">
+            <p class="text-xl font-bold text-purple-500">Nous soutenir</p>
+            <div class="flex flex-col mt-4">
+                <a href="#" class='hidden'>Faire un don</a>
+                    <a href="{% url 'register' %}" class="mt-2">Nous rejoindre</a>
+                        <a href="{% url 'ask' %}" class="mt-2">Posez une question</a>
+            </div>
+        </div>
+        <!-- Footer Contact  VIENS REGARDER SI C EST BON JE FAIS LA MIGRATION OOOHHH-->
+        <div class=" md:w-1/5">
+            <p class="text-xl font-bold text-purple-500">Contacts</p>
+            <div class="flex flex-col mt-4">
+                <a href="{% url 'us' %}#contact">Nous contacter</a>
+                <a href=" {% url 'us' %} " class='mt-2'>Notre Équipe</a>
+                    <a href="#" class="mt-2 hidden">Email: info@rellcare.com</a>
+                        <a href="#" class="mt-2 hidden">Tel: +237 6XX XXden XX XX</a>
+                            <a href="#" class="mt-2">Basé à: Yaoundé, Cameroun</a>
+            </div>
+        </div>
+    </div>
+    <div class="flex justify-between mt-8 text-white">
+        <p class="mt-auto text-xs">
+            Rell'Care 2020 - All rights reserved
+        </p>
+
+    </div>
+</div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+<script>
+    const app = new Vue({
+        delimiters: ["${", "}"],
+        el: "#app",
+        data: {
+            message: "Hello Vue!",
+            showMenu: false,
+        },
+    });
+  
+</script>
+{% block script %}
+{% endblock %}
+
+</html>
+
+</html>
